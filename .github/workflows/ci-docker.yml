@@ -71,7 +71,7 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
           docker run -d \
           --name backend \
-          -e NODE_ENV=production
+          -e NODE_ENV=production \
           -e JWT_SECRET=${{secrets.JWT_SECRET}} \
           -e ADMIN_JWT_SECRET=${{secrets.ADMIN_JWT_SECRET}} \
           -e HOST=0.0.0.0 \
