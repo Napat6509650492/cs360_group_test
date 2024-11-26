@@ -71,7 +71,6 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
           docker run -d \
           --name backend \
-          -e NODE_ENV=production \
           ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
       - name: Run Automated Tests in Docker Container
