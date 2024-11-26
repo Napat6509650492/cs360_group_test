@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # กำหนดให้ service นี้คือเว็บแอปพลิเคชัน
   web:
-    build: ./client
+    image: mysavev/savetofocus_front:latest
     container_name: web_app
     ports:
       - "3000:3000"
@@ -11,7 +11,7 @@ services:
       - webnet
 
   back:
-    build: ./api
+    image: mysavev/savetofocus_backend:latest
     container_name: backend
     environment:
       - HOST=web

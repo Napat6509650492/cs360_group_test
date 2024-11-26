@@ -30,6 +30,18 @@ jobs:
       - name: Push Docker Image to DockerHub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
+        
+  build-docker-front:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }} # Use the token here
 
       - name: Build Docker Image back
         working-directory: ./client
@@ -39,10 +51,9 @@ jobs:
       - name: Push Docker Image to DockerHub
         run: |
             docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest
-            
   # Step 3: Test Docker Image
   test-docker-image:
-    needs: build-docker-back
+    needs: [build-docker-back,build-docker-front]
     runs-on: ubuntu-latest
 
     steps:
@@ -51,17 +62,27 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }} # Use the token here
-
-      - name: Pull and Run Docker Image
+      - name: Create Custom Network
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/cs360_back:latest
-          docker run -d --name test-container ${{ secrets.DOCKER_USERNAME }}/cs360_back:latest
+          docker network create my_network
+
+      - name: Pull and Run Docker Image Backend
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
+          docker run -d \
+          --name backend \
+          --network my_network \
+          -e JWT_SECRET=${{secrets.JWT_SECRET}} \
+          -e ADMIN_JWT_SECRET=${{secrets.ADMIN_JWT_SECRET}} \
+          -e HOST=0.0.0.0 \
+          -e PORT=1337 \
+          ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
       - name: Run Automated Tests in Docker Container
         run: |
-          docker exec test-container yarn test 
+          docker exec backend yarn test 
 
       - name: Clean Up Docker Container
         run: |
-          docker stop test-container
-          docker rm test-container
+          docker stop backend
+          docker rm backend
