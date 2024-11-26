@@ -25,20 +25,20 @@ jobs:
       - name: Build Docker Image
         working-directory: ./api
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/backend .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest .
 
       - name: Push Docker Image to DockerHub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/cs360_back:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
       - name: Build Docker Image back
         working-directory: ./client
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/cs360_front:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest .
 
       - name: Push Docker Image to DockerHub
         run: |
-            docker push ${{ secrets.DOCKER_USERNAME }}/cs360_front:latest
+            docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest
             
   # Step 3: Test Docker Image
   test-docker-image:
