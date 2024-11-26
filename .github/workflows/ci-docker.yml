@@ -24,7 +24,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/cs360_back:latest ./api
+          cd api
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/cs360_back:latest .
 
       - name: Push Docker Image to DockerHub
         run: |
@@ -32,7 +33,8 @@ jobs:
 
       - name: Build Docker Image back
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/cs360_front:latest ./client
+          cd client
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/cs360_front:latest .
 
       - name: Push Docker Image to DockerHub
         run: |
