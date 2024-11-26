@@ -72,8 +72,6 @@ jobs:
           docker run -d \
           --name backend \
           -e NODE_ENV=production \
-          -e JWT_SECRET=${{secrets.JWT_SECRET}} \
-          -e ADMIN_JWT_SECRET=${{secrets.ADMIN_JWT_SECRET}} \
           ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
       - name: Run Automated Tests in Docker Container
