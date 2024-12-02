@@ -103,6 +103,8 @@ jobs:
             REPOSITORYFRONT: "${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend"
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ env.INSTANCE_PUBLIC_DNS }} << EOF
+          sudo yum install -y docker
+          sudo service docker start
           echo "BACKEND"
           sudo docker pull $REPOSITORY:latest
           sudo docker run -d --name backend_savetofocus \
