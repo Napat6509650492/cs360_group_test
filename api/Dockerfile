@@ -10,6 +10,8 @@ COPY . .
 
 RUN yarn seed
 
+RUN yarn build
+
 EXPOSE 1337
 
 CMD ["yarn","start"]
